@@ -1,10 +1,13 @@
 import sqlite3
 import random
 import os
+import pandas as pd
 
 banco = sqlite3.connect("alunos.db")
 cursor = banco.cursor()
+
 cursor.execute("CREATE TABLE IF NOT EXISTS chamada_alunos ('aluno'	TEXT,'num_chamada' INTEGER PRIMARY KEY AUTOINCREMENT)")
+
 
 def limpar():
     command = 'cls' if os.name == 'nt' else 'clear'
@@ -32,8 +35,10 @@ alunos_nomes = ["Denji",
 class Aluno():
     def inicializacao(self):
         alunos_chamada = random.sample(alunos_nomes, len(alunos_nomes))
+
         for i in alunos_chamada:
             cursor.execute("INSERT INTO chamada_alunos (aluno) VALUES (?)", (i,))
+            
         banco.commit()
 
     def aluno_random(self):
@@ -54,6 +59,12 @@ class Aluno():
         else:
             print(impar)
 
+    def mostrar_alunos(self):
+        comando = "SELECT * FROM chamada_alunos"
+        df = pd.read_sql(comando, banco)
+
+        pd.set_option('display.max_columns', None)
+        print(df)
 
 alunos = Aluno()
 
@@ -64,12 +75,12 @@ def main():
         valores = cursor.fetchone()[0]
 
         if valores > 0:
-            print(f"BANCO CRIADO: {True}")
+            print(f"BANCO ATIVO: {True}")
 
         else:
-            print(f"BANCO CRIADO: {False}")
+            print(f"BANCO ATIVO: {False}")
 
-        resposta = int(input("1- Inciar Programa\n2- Escolher um aluno aleatório\n3- Decidir batalha NPC\n->"))
+        resposta = int(input("1- Inciar Programa\n2- Escolher um aluno aleatório\n3- Decidir batalha NPC\n4- Mostrar Alunos\n->"))
 
         if resposta == 1:
             limpar()
@@ -82,6 +93,10 @@ def main():
         elif resposta == 3:
             limpar()
             alunos.escolher_entre2alunos()
+        
+        elif resposta == 4:
+            limpar()
+            alunos.mostrar_alunos()
 
 if __name__ == "__main__":
     main()
