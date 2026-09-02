@@ -66,6 +66,18 @@ class Aluno():
         pd.set_option('display.max_columns', None)
         print(df)
 
+    def excluir_aluno(self):
+        id_aluno = int(input("Digite o ID do Aluno: "))
+        cursor.execute("DELETE FROM chamada_alunos WHERE num_chamada = (?)", (id_aluno,))
+
+        banco.commit()
+
+    def adicionar_aluno(self):
+        nome_aluno = input("Digite o nome do aluno: ")
+        cursor.execute("INSERT INTO chamada_alunos (aluno) VALUES (?)", (nome_aluno,))
+
+        banco.commit()
+
 alunos = Aluno()
 
 def main():
@@ -80,7 +92,7 @@ def main():
         else:
             print(f"BANCO ATIVO: {False}")
 
-        resposta = int(input("1- Inciar Programa\n2- Escolher um aluno aleatório\n3- Decidir batalha NPC\n4- Mostrar Alunos\n->"))
+        resposta = int(input("1- Inciar Programa\n2- Escolher um aluno aleatório\n3- Decidir batalha NPC\n4- Mostrar Alunos\n5- Excluir Aluno\n6- Adicionar Aluno\n->"))
 
         if resposta == 1:
             limpar()
@@ -97,6 +109,14 @@ def main():
         elif resposta == 4:
             limpar()
             alunos.mostrar_alunos()
+
+        elif resposta == 5:
+            limpar()
+            alunos.excluir_aluno()
+
+        elif resposta == 6:
+            limpar()
+            alunos.adicionar_aluno()
 
 if __name__ == "__main__":
     main()
