@@ -78,6 +78,11 @@ class Aluno():
 
         banco.commit()
 
+    def contar_alunos(self):
+        cursor.execute("SELECT COUNT(*) FROM chamada_alunos")
+        (total,) = cursor.fetchone()
+        print(f"Total de alunos: {total}")
+
 alunos = Aluno()
 
 def main():
@@ -92,7 +97,7 @@ def main():
         else:
             print(f"BANCO ATIVO: {False}")
 
-        resposta = int(input("1- Inciar Programa\n2- Escolher um aluno aleatório\n3- Decidir batalha NPC\n4- Mostrar Alunos\n5- Excluir Aluno\n6- Adicionar Aluno\n->"))
+        resposta = int(input("1- Inciar Programa\n2- Escolher um aluno aleatório\n3- Decidir batalha NPC\n4- Mostrar Alunos\n5- Excluir Aluno\n6- Adicionar Aluno\n7- Contar Alunos\n->"))
 
         if resposta == 1:
             limpar()
@@ -117,6 +122,10 @@ def main():
         elif resposta == 6:
             limpar()
             alunos.adicionar_aluno()
+
+        elif resposta == 7:
+            limpar()
+            alunos.contar_alunos()
 
 if __name__ == "__main__":
     main()
